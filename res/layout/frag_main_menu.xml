@@ -5,9 +5,10 @@
     android:orientation="vertical" >
     
     <TextView 
+        android:id="@+id/tv_title"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="MAIN MENU HERE"/>
+        android:text="Category"/>
 
 </LinearLayout>

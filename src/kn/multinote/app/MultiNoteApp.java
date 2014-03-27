@@ -1,11 +1,8 @@
 package kn.multinote.app;
 
-import kn.multinote.ui.services.PopupNote;
-import android.app.ActivityManager;
+import kn.multinote.utils.FontUtils;
 import android.app.Application;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,6 +21,7 @@ public class MultiNoteApp extends Application {
 		super.onCreate();
 		Log.i(TAG, "[onCreate]");
 		instance = this;
+		FontUtils.init(this);
 	}
 
 	public static Context getContext() {

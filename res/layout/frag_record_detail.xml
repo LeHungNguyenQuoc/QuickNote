@@ -1,13 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
+    
+    <Button 
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="RECORD SCREEN DETAIL HERE" />
-
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/save"
+        android:id="@+id/bt_save"/>
+    
+    <LinearLayout
+        android:layout_above="@+id/bt_save"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:layout_height="fill_parent">
+        
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:background="@color/grey"/>
+        
+        <EditText 
+            android:id="@+id/et_name"
+            android:layout_margin="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_picture_frame"/>
+        
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/desciption"
+            android:background="@color/grey"/>
+        
+        <EditText 
+            android:id="@+id/et_description"
+            android:layout_margin="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_picture_frame"/>
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/type"
+            android:background="@color/grey"/>
+        
+        <EditText 
+            android:id="@+id/et_type"
+            android:layout_margin="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_picture_frame"/>
+        
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content"
+            android:background="@color/grey"/>
+        
+		<FrameLayout
+		    android:background="@drawable/bg_white_rounded"
+		    android:layout_margin="10dp"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:id="@+id/layout_content_container"/>
+		    
+        
+    </LinearLayout>
+    
+</RelativeLayout>

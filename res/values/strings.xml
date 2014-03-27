@@ -14,4 +14,9 @@
 
     <!-- DETAIL SCREEN -->
     <string name="detail_title">DETAIL RECORD 1</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="desciption">Description</string>
+    <string name="type">Type</string>
+    <string name="content">Content</string>
 </resources>

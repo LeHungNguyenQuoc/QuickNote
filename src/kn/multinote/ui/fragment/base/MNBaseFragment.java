@@ -17,7 +17,7 @@ public abstract class MNBaseFragment extends Fragment{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		onStartFragment();
+		onInitFragment();
 	} 
 	
 	/**
@@ -29,7 +29,7 @@ public abstract class MNBaseFragment extends Fragment{
 	/**
 	 * Setting for your fragment when enter state
 	 */
-	protected abstract void onStartFragment();
+	protected abstract void onInitFragment();
 	
 	
 	/**

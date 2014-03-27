@@ -34,8 +34,8 @@ public class NoteStorageActivity extends FragmentActivity{
 		mMainPager = (ViewPager) findViewById(R.id.pager);
 		mMainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mViewModel.pagerAdapter);
 		
-		HomeScreenFragment homeFragment = new HomeScreenFragment();
-		MainMenuFragment mainMenuFragment = new MainMenuFragment();
+		HomeScreenFragment homeFragment = new HomeScreenFragment(mMainPager);
+		MainMenuFragment mainMenuFragment = new MainMenuFragment(mMainPager);
 		mViewModel.pagerAdapter.fragments.add(mainMenuFragment);
 		mViewModel.pagerAdapter.fragments.add(homeFragment);
 		

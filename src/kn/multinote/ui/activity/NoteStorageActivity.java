@@ -3,7 +3,7 @@ package kn.multinote.ui.activity;
 import kn.multinote.data.viewmodel.activity.NoteStorageViewModel;
 import kn.multinote.ui.adapter.MainPagerAdapter;
 import kn.multinote.ui.fragment.DetailRecordFragment;
-import kn.multinote.ui.fragment.HomeScreenFragment;
+import kn.multinote.ui.fragment.RecordListFragment;
 import kn.multinote.ui.fragment.MainMenuFragment;
 import kn.multinote.utils.FontUtils;
 import android.os.Bundle;
@@ -35,12 +35,12 @@ public class NoteStorageActivity extends FragmentActivity{
 		mMainPager = (ViewPager) findViewById(R.id.pager);
 		mMainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), mViewModel.pagerAdapter);
 		
-		HomeScreenFragment homeFragment = new HomeScreenFragment(mMainPager);
 		MainMenuFragment mainMenuFragment = new MainMenuFragment(mMainPager);
+		RecordListFragment recordListFragment = new RecordListFragment(mMainPager);
 		DetailRecordFragment detailRecordFragment = new DetailRecordFragment(mMainPager);
 		
 		mViewModel.pagerAdapter.fragments.add(mainMenuFragment);
-		mViewModel.pagerAdapter.fragments.add(homeFragment);
+		mViewModel.pagerAdapter.fragments.add(recordListFragment);
 		mViewModel.pagerAdapter.fragments.add(detailRecordFragment);
 		
 		mMainPager.setAdapter(mMainPagerAdapter);

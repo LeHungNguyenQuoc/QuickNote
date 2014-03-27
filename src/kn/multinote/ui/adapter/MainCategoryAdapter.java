@@ -69,7 +69,6 @@ public class MainCategoryAdapter extends AmazingAdapter{
 
 	@Override
 	protected void onNextPageRequested(int arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 

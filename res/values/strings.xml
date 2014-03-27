@@ -7,6 +7,11 @@
     <string name="popup_note">Popup Note</string>
     
 	<!-- CATEGORY -->
-    <string name="category_title">CATEGORY</string>
+    <string name="category_title">CATEGORIES</string>
+    
+    <!-- LIST SCREEN -->
+    <string name="list_title">CATEGORY 1</string>
 
+    <!-- DETAIL SCREEN -->
+    <string name="detail_title">DETAIL RECORD 1</string>
 </resources>

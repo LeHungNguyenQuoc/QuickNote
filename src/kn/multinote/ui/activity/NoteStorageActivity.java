@@ -2,6 +2,7 @@ package kn.multinote.ui.activity;
 
 import kn.multinote.data.viewmodel.activity.NoteStorageViewModel;
 import kn.multinote.ui.adapter.MainPagerAdapter;
+import kn.multinote.ui.fragment.DetailRecordFragment;
 import kn.multinote.ui.fragment.HomeScreenFragment;
 import kn.multinote.ui.fragment.MainMenuFragment;
 import kn.multinote.utils.FontUtils;
@@ -36,8 +37,11 @@ public class NoteStorageActivity extends FragmentActivity{
 		
 		HomeScreenFragment homeFragment = new HomeScreenFragment(mMainPager);
 		MainMenuFragment mainMenuFragment = new MainMenuFragment(mMainPager);
+		DetailRecordFragment detailRecordFragment = new DetailRecordFragment(mMainPager);
+		
 		mViewModel.pagerAdapter.fragments.add(mainMenuFragment);
 		mViewModel.pagerAdapter.fragments.add(homeFragment);
+		mViewModel.pagerAdapter.fragments.add(detailRecordFragment);
 		
 		mMainPager.setAdapter(mMainPagerAdapter);
 	}

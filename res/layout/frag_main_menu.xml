@@ -9,6 +9,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Category"/>
+        android:text="@string/category_title"/>
+    
+    <com.foound.widget.AmazingListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/lv_category" />
 
 </LinearLayout>

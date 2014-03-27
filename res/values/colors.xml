@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="grey">#999999</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="orange">#FFB114</color>
+    <color name="red">#f00</color>
+    <color name="blue">#003ccf</color>
+    <color name="light_blue">#007dbb</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="dialog_transparent">#20000000</color>
+    <color name="dark_gray">#666666</color>
+    <color name="light_gray">#c8c8c8</color>
+    <color name="green">#00ff00</color>
+    <color name="blue_group_activities">#007ebc</color>
+
+    <!-- 10 inches -->
+    <color name="color_grey_bg_input_textfield">#d9d9d9</color>
+    <color name="color_bg_listview">#EAEAEA</color>
+    <color name="color_bg_group_item_activity">#ebebeb</color>
+    <color name="color_ocean_blue">#022bc3</color>
+    <color name="common_background">#f2f2f2</color>
+    <color name="list_devider">#e5e5e5</color>
+
+</resources>

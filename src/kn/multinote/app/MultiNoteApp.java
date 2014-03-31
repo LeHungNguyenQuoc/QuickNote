@@ -28,7 +28,10 @@ public class MultiNoteApp extends Application {
 		FontUtils.init(this);
 
 		registryLog();
-		startService(new Intent(this, PopupNote.class));
+		Intent intent = new Intent(this, PopupNote.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+		startService(intent);
 
 	}
 

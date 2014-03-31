@@ -55,7 +55,7 @@
             android:process="" >
         </service>
         <service
-            android:name="kn.multinote.ui.services.MyTestService"
+            android:name="kn.multinote.ui.services.QuickNoteService"
             android:label="@string/popup_note"
             android:process="" >
         </service>

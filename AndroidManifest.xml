@@ -53,6 +53,11 @@
             android:name="kn.multinote.ui.services.PopupNote"
             android:label="@string/popup_note" >
         </service>
+        <service
+            android:name="kn.multinote.ui.services.MyTestService"
+            android:process=""
+            android:label="@string/popup_note" >
+        </service>
     </application>
 
 </manifest>

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kn.multinote.dto.iLog;
-import kn.multinote.transaction.TransactionCommandAck;
+import kn.supportrelax.database.transaction.TransactionCommandAck;
 import android.os.Environment;
 
 public class FileLogWrite {

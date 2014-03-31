@@ -1,6 +1,11 @@
 package kn.multinote.ui.activity;
 
+import kn.multinote.database.access.ISystemSettingDAO;
+import kn.multinote.dto.SystemSettingDto;
+import kn.multinote.factory.DAOFactory;
+import kn.multinote.ui.services.QuickNoteService;
 import kn.multinote.ui.services.PopupNote;
+import kn.supportrelax.database.transaction.TransactionCommandAck;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -19,28 +24,51 @@ public class MainActivity extends Activity {
 				.getWidth();
 		PopupNote.heightTruct = getWindowManager().getDefaultDisplay()
 				.getHeight();
-//		if (!isMyServiceRunning())
-//			startService(new Intent(this, PopupNote.class));
-//		else {
-//			startActivity(new Intent(this, NoteStorageActivity.class));
-//		}
-//		finish();
+		QuickNoteService.widthTruct = getWindowManager().getDefaultDisplay()
+				.getWidth();
+		QuickNoteService.heightTruct = getWindowManager().getDefaultDisplay()
+				.getHeight();
+
+		if (QuickNoteService.getInstance() == null) {
+			Intent intent = new Intent(getApplicationContext(),
+					QuickNoteService.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+			startService(intent);
+			saveSystemSetting();
+		} else {
+			startActivity(new Intent(this, NoteStorageActivity.class));
+		}
+
+	}
+
+	public void saveSystemSetting() {
+		ISystemSettingDAO systemSettingDao = DAOFactory.getInstance()
+				.getComponent(ISystemSettingDAO.class);
+		TransactionCommandAck result = systemSettingDao.getAll();
+		if (result != null) {
+			if (!result.isSuccess) {
+				SystemSettingDto mySystemSetting = new SystemSettingDto(
+						QuickNoteService.widthTruct, QuickNoteService.heightTruct);
+				systemSettingDao.save(mySystemSetting);
+			}
+		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-//		if (isMyServiceRunning()) {
-//			stopService(new Intent(this, PopupNote.class));
-//		}
-//		if (startService(new Intent(this, PopupNote.class)) != null) {
-			// Toast.makeText(getBaseContext(), "Service is already running",
-			// Toast.LENGTH_SHORT).show();
-			// } else {
-			// Toast.makeText(getBaseContext(),
-			// "There is no service running, starting service..",
-			// Toast.LENGTH_SHORT).show();
-//		}
+		// if (isMyServiceRunning()) {
+		// stopService(new Intent(this, PopupNote.class));
+		// }
+		// if (startService(new Intent(this, PopupNote.class)) != null) {
+		// Toast.makeText(getBaseContext(), "Service is already running",
+		// Toast.LENGTH_SHORT).show();
+		// } else {
+		// Toast.makeText(getBaseContext(),
+		// "There is no service running, starting service..",
+		// Toast.LENGTH_SHORT).show();
+		// }
 	}
 
 	private boolean isMyServiceRunning() {
@@ -76,10 +104,10 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-//		Intent reLaunchMain = new Intent(this, MainActivity.class);
-//		reLaunchMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//		reLaunchMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		startActivity(reLaunchMain);
+		// Intent reLaunchMain = new Intent(this, MainActivity.class);
+		// reLaunchMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// reLaunchMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		// startActivity(reLaunchMain);
 	}
 
 }

@@ -20,6 +20,9 @@ public class FileLogImpl implements IBaseLog {
 	@Override
 	public void export(String log) {
 		// Write log to file
+		if (mLogDAO == null) {
+			mLogDAO = new FileLogWrite();
+		}
 		iLog log1 = new iLog();
 		log1.setContent(log);
 		mLogDAO.save(log1);

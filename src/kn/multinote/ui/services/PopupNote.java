@@ -1,24 +1,29 @@
 package kn.multinote.ui.services;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Timer;
 
+import kn.multinote.database.access.ISystemSettingDAO;
+import kn.multinote.dto.SystemSettingDto;
+import kn.multinote.factory.DAOFactory;
 import kn.multinote.ui.activity.R;
 import kn.multinote.ui.icon.implement.IconHomeScreen;
 import kn.multinote.ui.icon.implement.IconNoteCapture;
 import kn.multinote.ui.icon.implement.IconNoteFinance;
 import kn.multinote.ui.icon.implement.IconNoteRecordSound;
 import kn.multinote.ui.object.IconNote;
+import kn.supportrelax.database.transaction.TransactionCommandAck;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,25 +32,33 @@ import android.widget.Toast;
 
 public class PopupNote extends Service {
 
-	private Timer timer;
+	// private Timer timer;
 
-	public static View mView;
-	public static View mViewNext;
-	public static WindowManager.LayoutParams mParams;
-	public static WindowManager.LayoutParams mParamNexts;
-	public static WindowManager mWindowManager;
+	public View mView;
+	public View mViewNext;
+	public WindowManager.LayoutParams mParams;
+	public WindowManager.LayoutParams mParamNexts;
+	public WindowManager mWindowManager;
 	public static int widthTruct;
 	public static int heightTruct;
 	public static int mwidth, mheight;
 	public static boolean flagViewNext;
+	public boolean flagStarted;
+	private static PopupNote instance;
 	public int posX, posY;
+	public SystemSettingDto mySystemSetting;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		mwidth = 200 * widthTruct / 240;
 		mheight = 200 * widthTruct / 240;
-		init();
+		showIcon();
+		instance = this;
+	}
+
+	public static PopupNote getInstance() {
+		return instance;
 	}
 
 	public void changeView(View view, WindowManager.LayoutParams params) {
@@ -65,9 +78,7 @@ public class PopupNote extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (timer != null) {
-			timer.cancel();
-		}
+		Log.e("debug", "PopupNote ========== on destroy");
 		try {
 			((WindowManager) getSystemService(WINDOW_SERVICE))
 					.removeView(mView);
@@ -78,6 +89,7 @@ public class PopupNote extends Service {
 		}
 		mView = null;
 		mViewNext = null;
+		flagStarted = true;
 		Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
 
 	}
@@ -87,50 +99,46 @@ public class PopupNote extends Service {
 	public final static int COUNT_TIMER = 1000;
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startid) {
-		init();
-		mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-		changeView(mView, mParams);
-		// timer.scheduleAtFixedRate(new TimerTask() {
-		// @Override
-		// public void run() {
-		// // Toast toast = Toast.makeText(getApplicationContext(),
-		// // "Now Playing: " + a, Toast.LENGTH_LONG);
-		// // toast.show();
-		// try {
-		// if (!flagViewNext) {
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		Log.d("debug", "========== on config change");
+		showIcon();
+
 		// changeView(mView, mParams);
-		// }
-		//
-		// } catch (Exception ex) {
-		// // if (!flagViewNext) {
-		// // mWindowManager.updateViewLayout(mView, mParams);
-		// // }
-		// }
-		// a += 1;
-		// }
-		// }, COUNT_TIMER, 1000);
-		return START_STICKY;
 	}
 
-	public void init() {
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startid) {
+		flagStarted = true;
+		showIcon();
+		return super.onStartCommand(intent, flags, startid);
+	}
+
+	public void showIcon() {
 		if (mView == null) {
-			mView = new IconNoteView(this);
-			mViewNext = new NextView(this);
+			ISystemSettingDAO systemSettingDao = DAOFactory.getInstance()
+					.getComponent(ISystemSettingDAO.class);
+			TransactionCommandAck result = systemSettingDao.getAll();
+			if (result != null) {
+				if (result.isSuccess) {
+					List<SystemSettingDto> lSystem = (List<SystemSettingDto>) result.returnValue;
+					mySystemSetting = lSystem.get(0);
+					widthTruct = mySystemSetting.getWidthTruct();
+					heightTruct = mySystemSetting.getHeightTruct();
+				}
+			}
+			mView = new IconNoteView(getApplicationContext());
+			mViewNext = new NextView(getApplicationContext());
 			mParams = new WindowManager.LayoutParams(
-					40 * widthTruct / 240,
-					40 * widthTruct / 240,
-					0,
-					0,
-					WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
-							| WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+					WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
 					WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 							| WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 							| WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
 							| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
 							| WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
 					PixelFormat.TRANSLUCENT);
-
+			mParams.width = 35 * widthTruct / 240;
+			mParams.height = 35 * widthTruct / 240;
 			posX = (widthTruct - mwidth) / 2;
 			posY = (heightTruct - mheight) / 2;
 			mParamNexts = new WindowManager.LayoutParams(
@@ -145,13 +153,11 @@ public class PopupNote extends Service {
 					PixelFormat.TRANSLUCENT);
 
 			mParams.gravity = Gravity.TOP | Gravity.LEFT;
-			// mParams.systemUiVisibility = 0;
 			mParamNexts.gravity = Gravity.TOP | Gravity.LEFT;
 			mParams.setTitle("Window test");
-
-			// changeView(mView, mParams);
+			mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 			flagViewNext = false;
-			timer = new Timer();
+			changeView(mView, mParams);
 		}
 	}
 
@@ -168,20 +174,23 @@ public class PopupNote extends Service {
 
 		public IconNoteView(Context context) {
 			super(context);
-			mPaint = new Paint();
-			mPaint.setTextSize(50);
-			mPaint.setARGB(200, 200, 200, 200);
-			Drawable drawable = context.getResources().getDrawable(
-					R.drawable.ic_launcher);
-
-			bitmap = ((BitmapDrawable) drawable).getBitmap();
-			//setBackground(drawable);
+			// mPaint = new Paint();
+			// mPaint.setTextSize(50);
+			// mPaint.setARGB(200, 200, 200, 200);
+			// Drawable drawable = context.getResources().getDrawable(
+			// R.drawable.ic_launcher);
+			//
+			// bitmap = ((BitmapDrawable) drawable).getBitmap();
+			setBackgroundResource(R.drawable.ic_launcher);
 		}
 
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			canvas.drawBitmap(bitmap, 0, 0, null);
+			// canvas.drawBitmap(bitmap,
+			// new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
+			// new Rect(0, 0, getWidth(), getHeight()), null);
+			// canvas.drawRect(new Rect(0, 0, getWidth(), getHeight()), mPaint);
 		}
 
 		@Override
@@ -336,10 +345,10 @@ public class PopupNote extends Service {
 
 		public NextView(Context context) {
 			super(context);
-			Drawable drawable = context.getResources().getDrawable(
-					R.drawable.move_touch);
-			bitmap = ((BitmapDrawable) drawable).getBitmap();
-			//setBackground(drawable);
+			// Drawable drawable = context.getResources().getDrawable(
+			// R.drawable.move_touch);
+			// bitmap = ((BitmapDrawable) drawable).getBitmap();
+			setBackgroundResource(R.drawable.ic_launcher);
 			IconNote.widthIcon = 41 * widthTruct / 240;
 			IconNote.heightIcon = 41 * widthTruct / 240;
 			iconSound = new IconNoteRecordSound(R.drawable.ic_sound,
@@ -361,7 +370,9 @@ public class PopupNote extends Service {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			canvas.drawBitmap(bitmap, 0, 0, null);
+			// canvas.drawBitmap(bitmap,
+			// new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
+			// new Rect(0, 0, getWidth(), getHeight()), null);
 			iconSound.paint(canvas);
 			iconHomescreen.paint(canvas);
 			iconCapture.paint(canvas);

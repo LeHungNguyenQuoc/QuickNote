@@ -174,14 +174,14 @@ public class PopupNote extends Service {
 			Drawable drawable = context.getResources().getDrawable(
 					R.drawable.ic_launcher);
 
-			// bitmap = ((BitmapDrawable) drawable).getBitmap();
-			setBackground(drawable);
+			bitmap = ((BitmapDrawable) drawable).getBitmap();
+			//setBackground(drawable);
 		}
 
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			// canvas.drawBitmap(bitmap, 0, 0, null);
+			canvas.drawBitmap(bitmap, 0, 0, null);
 		}
 
 		@Override
@@ -332,14 +332,14 @@ public class PopupNote extends Service {
 		private IconNote iconCapture;
 		private IconNote iconFinance;
 
-		// private Bitmap bitmap;
+		private Bitmap bitmap;
 
 		public NextView(Context context) {
 			super(context);
 			Drawable drawable = context.getResources().getDrawable(
 					R.drawable.move_touch);
-			// bitmap = ((BitmapDrawable) drawable).getBitmap();
-			setBackground(drawable);
+			bitmap = ((BitmapDrawable) drawable).getBitmap();
+			//setBackground(drawable);
 			IconNote.widthIcon = 41 * widthTruct / 240;
 			IconNote.heightIcon = 41 * widthTruct / 240;
 			iconSound = new IconNoteRecordSound(R.drawable.ic_sound,
@@ -361,7 +361,7 @@ public class PopupNote extends Service {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			// canvas.drawBitmap(bitmap, 0, 0, null);
+			canvas.drawBitmap(bitmap, 0, 0, null);
 			iconSound.paint(canvas);
 			iconHomescreen.paint(canvas);
 			iconCapture.paint(canvas);

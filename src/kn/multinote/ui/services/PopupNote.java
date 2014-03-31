@@ -2,19 +2,21 @@ package kn.multinote.ui.services;
 
 import java.util.Calendar;
 import java.util.Timer;
-import java.util.TimerTask;
 
-import kn.multinote.app.MultiNoteApp;
 import kn.multinote.ui.activity.R;
 import kn.multinote.ui.icon.implement.IconHomeScreen;
+import kn.multinote.ui.icon.implement.IconNoteCapture;
+import kn.multinote.ui.icon.implement.IconNoteFinance;
 import kn.multinote.ui.icon.implement.IconNoteRecordSound;
 import kn.multinote.ui.object.IconNote;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.view.Gravity;
@@ -76,6 +78,8 @@ public class PopupNote extends Service {
 		}
 		mView = null;
 		mViewNext = null;
+		Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+
 	}
 
 	int a = 0;
@@ -160,17 +164,18 @@ public class PopupNote extends Service {
 		public Thread thread;
 		// private WindowManager.LayoutParams param;
 		boolean flagStop = false;
+		public Bitmap bitmap;
 
 		public IconNoteView(Context context) {
 			super(context);
 			mPaint = new Paint();
 			mPaint.setTextSize(50);
 			mPaint.setARGB(200, 200, 200, 200);
-			Drawable drawable = MultiNoteApp.getContext().getResources()
-					.getDrawable(R.drawable.ic_launcher);
+			Drawable drawable = context.getResources().getDrawable(
+					R.drawable.ic_launcher);
 
 			// bitmap = ((BitmapDrawable) drawable).getBitmap();
-			setBackgroundDrawable(drawable);
+			setBackground(drawable);
 		}
 
 		@Override
@@ -324,11 +329,16 @@ public class PopupNote extends Service {
 		private boolean flagTouch;
 		private IconNote iconSound;
 		private IconNote iconHomescreen;
+		private IconNote iconCapture;
+		private IconNote iconFinance;
+
+		// private Bitmap bitmap;
 
 		public NextView(Context context) {
 			super(context);
-			Drawable drawable = MultiNoteApp.getContext().getResources()
-					.getDrawable(R.drawable.move_touch);
+			Drawable drawable = context.getResources().getDrawable(
+					R.drawable.move_touch);
+			// bitmap = ((BitmapDrawable) drawable).getBitmap();
 			setBackground(drawable);
 			IconNote.widthIcon = 41 * widthTruct / 240;
 			IconNote.heightIcon = 41 * widthTruct / 240;
@@ -339,6 +349,13 @@ public class PopupNote extends Service {
 					R.drawable.ic_homefocus);
 			iconHomescreen.setPos((mwidth - IconNote.widthIcon) / 2, mheight
 					- 20 - IconNote.heightIcon);
+			iconCapture = new IconNoteCapture(R.drawable.ic_capture,
+					R.drawable.ic_capture_focus);
+			iconCapture.setPos(20, (mheight - IconNote.heightIcon) / 2);
+			iconFinance = new IconNoteFinance(R.drawable.ic_money,
+					R.drawable.ic_money_focus);
+			iconFinance.setPos(mwidth - 20 - IconNote.widthIcon,
+					(mheight - IconNote.heightIcon) / 2);
 		}
 
 		@Override
@@ -347,6 +364,8 @@ public class PopupNote extends Service {
 			// canvas.drawBitmap(bitmap, 0, 0, null);
 			iconSound.paint(canvas);
 			iconHomescreen.paint(canvas);
+			iconCapture.paint(canvas);
+			iconFinance.paint(canvas);
 		}
 
 		@Override
@@ -374,6 +393,8 @@ public class PopupNote extends Service {
 				iconSound.checkArea((int) event.getX(), (int) event.getY());
 				iconHomescreen
 						.checkArea((int) event.getX(), (int) event.getY());
+				iconCapture.checkArea((int) event.getX(), (int) event.getY());
+				iconFinance.checkArea((int) event.getX(), (int) event.getY());
 				this.invalidate();
 				flagTouch = true;
 				break;
@@ -381,6 +402,8 @@ public class PopupNote extends Service {
 				iconSound.checkArea((int) event.getX(), (int) event.getY());
 				iconHomescreen
 						.checkArea((int) event.getX(), (int) event.getY());
+				iconCapture.checkArea((int) event.getX(), (int) event.getY());
+				iconFinance.checkArea((int) event.getX(), (int) event.getY());
 				this.invalidate();
 				break;
 			case MotionEvent.ACTION_UP:
@@ -395,6 +418,18 @@ public class PopupNote extends Service {
 						iconHomescreen.setFocus(false);
 						changeView(mView, mParams);
 						mWindowManager.removeView(mViewNext);
+					} else {
+						if (iconCapture.getFocus()) {
+							iconCapture.runable();
+							iconCapture.setFocus(false);
+							changeView(mView, mParams);
+							mWindowManager.removeView(mViewNext);
+						} else if (iconFinance.getFocus()) {
+							iconFinance.runable();
+							iconFinance.setFocus(false);
+							changeView(mView, mParams);
+							mWindowManager.removeView(mViewNext);
+						}
 					}
 				}
 				flagTouch = false;

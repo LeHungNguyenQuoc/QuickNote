@@ -19,4 +19,18 @@
     <string name="desciption">Description</string>
     <string name="type">Type</string>
     <string name="content">Content</string>
+    
+    <!-- CAPTURE SOUND -->
+    <string name="capture">Capture</string>
+    <string name="photo">Photo</string>
+    
+    <!-- DISPLAY CAPTURE SOUND -->
+    <string name="displaycapturesound">Disply capture sound</string>
+    
+    <!-- SHOW NOTE -->
+    <string name="NameNote">Name Note</string>
+    <string name="date">Date</string>
+    <string name="play">Play</string>
+    
+    
 </resources>

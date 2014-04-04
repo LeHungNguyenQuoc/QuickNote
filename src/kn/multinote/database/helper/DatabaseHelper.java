@@ -2,6 +2,7 @@ package kn.multinote.database.helper;
 
 import java.sql.SQLException;
 
+import kn.multinote.dto.NoteDto;
 import kn.multinote.dto.SystemSettingDto;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,6 +34,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			ConnectionSource connectionSource) {
 		try {
 			TableUtils.createTable(connectionSource, SystemSettingDto.class);
+			TableUtils.createTable(connectionSource, NoteDto.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -45,6 +47,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils
 					.dropTable(connectionSource, SystemSettingDto.class, true);
 			onCreate(sqLiteDatabase, connectionSource);
+			TableUtils.dropTable(connectionSource, NoteDto.class, true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

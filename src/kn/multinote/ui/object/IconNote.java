@@ -2,6 +2,7 @@ package kn.multinote.ui.object;
 
 import kn.multinote.app.MultiNoteApp;
 import kn.multinote.defines.TypeIconNote;
+import kn.multinote.ui.activity.CaptureSoundActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -89,6 +90,12 @@ public abstract class IconNote {
 			startMain.addCategory(Intent.CATEGORY_HOME);
 			startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			MultiNoteApp.getContext().startActivity(startMain);
+			break;
+		case TypeIconNote.NOTECAPTURE:
+			Intent intent = new Intent(MultiNoteApp.getContext(),
+					CaptureSoundActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			MultiNoteApp.getContext().startActivity(intent);
 			break;
 
 		default:

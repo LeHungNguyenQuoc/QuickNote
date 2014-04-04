@@ -1,25 +1,28 @@
 package kn.multinote.ui.activity;
 
-import kn.multinote.database.access.ISystemSettingDAO;
-import kn.multinote.dto.SystemSettingDto;
-import kn.multinote.factory.DAOFactory;
-import kn.multinote.ui.services.QuickNoteService;
+import kn.multinote.defines.MessageConstant;
+import kn.multinote.ui.controller.MainController;
 import kn.multinote.ui.services.PopupNote;
-import kn.supportrelax.database.transaction.TransactionCommandAck;
+import kn.multinote.ui.services.QuickNoteService;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.view.Menu;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Callback {
+
+	private MainController mController;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		// setContentView(R.layout.activity_main);
 		PopupNote.widthTruct = getWindowManager().getDefaultDisplay()
 				.getWidth();
 		PopupNote.heightTruct = getWindowManager().getDefaultDisplay()
@@ -29,54 +32,26 @@ public class MainActivity extends Activity {
 		QuickNoteService.heightTruct = getWindowManager().getDefaultDisplay()
 				.getHeight();
 
-		if (QuickNoteService.getInstance() == null) {
-			Intent intent = new Intent(getApplicationContext(),
-					QuickNoteService.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-			startService(intent);
-			saveSystemSetting();
-		} else {
-			startActivity(new Intent(this, NoteStorageActivity.class));
-		}
-
-	}
-
-	public void saveSystemSetting() {
-		ISystemSettingDAO systemSettingDao = DAOFactory.getInstance()
-				.getComponent(ISystemSettingDAO.class);
-		TransactionCommandAck result = systemSettingDao.getAll();
-		if (result != null) {
-			if (!result.isSuccess) {
-				SystemSettingDto mySystemSetting = new SystemSettingDto(
-						QuickNoteService.widthTruct, QuickNoteService.heightTruct);
-				systemSettingDao.save(mySystemSetting);
-			}
-		}
+		mController = new MainController();
+		mController.addOutboxHandler(new Handler(this));
+		mController.handleMessage(MessageConstant.MESSAGE_START_SERVICE);
+		
+		startActivity(new Intent(getApplicationContext(),
+				ShownoteActivity.class));
+		
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		// if (isMyServiceRunning()) {
-		// stopService(new Intent(this, PopupNote.class));
-		// }
-		// if (startService(new Intent(this, PopupNote.class)) != null) {
-		// Toast.makeText(getBaseContext(), "Service is already running",
-		// Toast.LENGTH_SHORT).show();
-		// } else {
-		// Toast.makeText(getBaseContext(),
-		// "There is no service running, starting service..",
-		// Toast.LENGTH_SHORT).show();
-		// }
 	}
 
 	private boolean isMyServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager
 				.getRunningServices(Integer.MAX_VALUE)) {
-			if (PopupNote.class.getName()
-					.equals(service.service.getClassName())) {
+			if (QuickNoteService.class.getName().equals(
+					service.service.getClassName())) {
 				return true;
 			}
 		}
@@ -108,6 +83,20 @@ public class MainActivity extends Activity {
 		// reLaunchMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		// reLaunchMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		// startActivity(reLaunchMain);
+	}
+
+	@Override
+	public boolean handleMessage(Message msg) {
+		switch (msg.what) {
+		case MessageConstant.MESSAGE_START_SHOWNOTE:
+			startActivity(new Intent(getApplicationContext(),
+					ShownoteActivity.class));
+			break;
+
+		default:
+			break;
+		}
+		return false;
 	}
 
 }

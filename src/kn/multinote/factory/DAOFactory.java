@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import kn.multinote.database.access.IBaseDAO;
+import kn.multinote.database.access.INoteDAO;
 import kn.multinote.database.access.ISystemSettingDAO;
 
 public class DAOFactory implements IComponent {
@@ -23,6 +24,16 @@ public class DAOFactory implements IComponent {
 
 					Constructor<?> constr = claz.getConstructor();
 					return (T) constr.newInstance();
+				} else if (clazz.getName().equalsIgnoreCase(
+						INoteDAO.class.getName())) {
+					Class<? extends IBaseDAO> claz = Class
+							.forName(
+									"kn.multinote.database.access.sqlite.SqliteNoteDao")
+							.asSubclass(IBaseDAO.class);
+
+					Constructor<?> constr = claz.getConstructor();
+					return (T) constr.newInstance();
+
 				}
 			} else {
 				Class<? extends IBaseDAO> claz = Class.forName(clazz.getName())

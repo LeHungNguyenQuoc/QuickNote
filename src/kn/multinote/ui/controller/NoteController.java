@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kn.multinote.database.access.INoteDAO;
+import kn.multinote.defines.MessageConstant;
 import kn.multinote.dto.NoteDto;
 import kn.multinote.factory.DAOFactory;
 import kn.supportrelax.database.transaction.TransactionCommandAck;
@@ -36,7 +37,10 @@ public class NoteController extends Controller {
 	@Override
 	public boolean handleMessage(int what, Object data) {
 		switch (what) {
-		
+		case MessageConstant.MESSAGE_VIEW_NOTE:
+			notifyOutboxHandlers(MessageConstant.MESSAGE_VIEW_NOTE, -1,
+					 -1,data);
+			break;
 		}
 		return false;
 	}

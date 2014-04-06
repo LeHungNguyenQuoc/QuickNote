@@ -1,8 +1,11 @@
 package kn.multinote.ui.activity;
 
+import kn.multinote.defines.MessageConstant;
+import kn.multinote.dto.NoteDto;
 import kn.multinote.ui.adapter.NoteAdapter;
 import kn.multinote.ui.controller.NoteController;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -42,8 +45,15 @@ public class ShownoteActivity extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public boolean handleMessage(Message arg0) {
-		// TODO Auto-generated method stub
+	public boolean handleMessage(Message msg) {
+		switch(msg.what){
+		case MessageConstant.MESSAGE_VIEW_NOTE:
+			Intent intent = new Intent(this,
+					DisplayCaptureSoundActivity.class);
+			intent.putExtra("note", (NoteDto)msg.obj);
+			startActivity(intent);
+			break;
+		}
 		return false;
 	}
 

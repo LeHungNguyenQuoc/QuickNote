@@ -71,25 +71,22 @@ public class NoteAdapter extends BaseAdapter implements OnClickListener {
 				.findViewById(R.id.tvNameNote);
 		holder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
 		holder.ivType = (ImageView) convertView.findViewById(R.id.ivTypeNote);
-		holder.ivOpen = (ImageView) convertView.findViewById(R.id.ivOpen);
+		
 		if (lNotes.get(position).getTypeNote() == TypeNote.NOTECAPTURE) {
 			holder.ivType.setBackgroundResource(R.drawable.ic_capturep);
 		}
-		holder.ivOpen.setOnClickListener(this);
 		convertView.setTag(holder);
 		holder.tvNameNote.setText(lNotes.get(position).getNameNote());
 		SimpleDateFormat formatdate = new SimpleDateFormat("dd/MM/yy");
 		holder.tvDate
 				.setText(formatdate.format(lNotes.get(position).getDate()));
-		holder.ivOpen.setTag(lNotes.get(position));
 		convertView.setTag(lNotes.get(position));
-		convertView.setOnLongClickListener(new View.OnLongClickListener() {
+		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public boolean onLongClick(View v) {
+			public void onClick(View v) {
 				NoteDto msg = (NoteDto) v.getTag();
 				mController.handleMessage(MessageConstant.MESSAGE_VIEW_NOTE,
 						msg);
-				return true;
 			}
 		});
 		return convertView;
@@ -99,19 +96,13 @@ public class NoteAdapter extends BaseAdapter implements OnClickListener {
 		TextView tvNameNote;
 		TextView tvDate;
 		ImageView ivType;
-		ImageView ivOpen;
+		
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.ivOpen:
-			NoteDto msg = (NoteDto) v.getTag();
-			Intent intent = new Intent(context,
-					DisplayCaptureSoundActivity.class);
-			intent.putExtra("note", msg);
-			context.startActivity(intent);
-			break;
+		
 		default:
 			break;
 		}

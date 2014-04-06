@@ -28,9 +28,11 @@
     <string name="displaycapturesound">Disply capture sound</string>
     
     <!-- SHOW NOTE -->
+    <string name="ShowNote">Notes</string>
     <string name="NameNote">Name Note</string>
     <string name="date">Date</string>
     <string name="play">Play</string>
+    <string name="next">></string>
     
     
 </resources>
